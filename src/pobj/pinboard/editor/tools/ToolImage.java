@@ -4,16 +4,18 @@ import java.io.File;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import pobj.pinboard.document.ClipEllipse;
 import pobj.pinboard.document.ClipImage;
 import pobj.pinboard.editor.EditorInterface;
 
 public class ToolImage implements Tool{
 	private Stage stage;
 	private File selectedFile;
-	private double oriX, oriY;
+	private double oriX, oriY, endX, endY;
 	public ToolImage(Stage stage) {
 		this.stage = stage;
 		 FileChooser fileChooser = new FileChooser();
@@ -22,7 +24,7 @@ public class ToolImage implements Tool{
 		 
 		 selectedFile = fileChooser.showOpenDialog(stage);
 		 
-        if (selectedFile != null) {
+        if (selectedFile == null) {
             System.out.println("aucune img séléctionnée");
         	
         }
@@ -30,49 +32,35 @@ public class ToolImage implements Tool{
 
 	@Override
 	public void press(EditorInterface i, MouseEvent e) {
-		/**
-		if(selectedFile != null) {
-			oriX = e.getX();
-			oriY = e.getY();
-		}
-		*/
-		
-		try {
-			ClipImage img = new ClipImage(e.getX(), e.getY(), selectedFile);
-		}catch(Exception ex) {
-			System.out.println("ClipImage n'est pas instanciée");
-		}
+		oriX = e.getX();
+		oriY = e.getY();
 		
 	}
 
 	@Override
 	public void drag(EditorInterface i, MouseEvent e) {
 		
-		
 	}
 
 	@Override
 	public void release(EditorInterface i, MouseEvent e) {
-		if (selectedFile != null) {
-            try {
-                i.getBoard().addClip(new ClipImage(oriX, oriY, selectedFile));
-            } catch (Exception ex) {
-                throw new RuntimeException();
-            }
-        }
-		
+		try {
+			ClipImage img = new ClipImage(oriX, oriY, selectedFile);
+			i.getBoard().addClip(img);
+
+		}catch(Exception ex) {
+			System.out.println("ClipImage n'est pas instanciée");
+		}
 	}
 
 	@Override
 	public void drawFeedback(EditorInterface i, GraphicsContext gc) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public String getName(EditorInterface editor) {
-		// TODO Auto-generated method stub
-		return null;
+		return editor.toString();
 	}
 
 }
