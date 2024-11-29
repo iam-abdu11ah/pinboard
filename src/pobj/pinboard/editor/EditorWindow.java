@@ -62,6 +62,16 @@ public class EditorWindow implements EditorInterface{
 		
 		//Edit
 		Menu editMenu = new Menu("Edit");
+		//drop-down (menu itmes du Edit)
+		MenuItem copy = new MenuItem("Copy");
+		MenuItem paste = new MenuItem("Paste");
+		MenuItem delete = new MenuItem("Delete");
+		editMenu.getItems().addAll(copy, paste, delete);
+		
+		//actions pour les Menu items de Edit
+		copy.setOnAction(e -> Clipboard.getInstance().copyToClipboard(selected.getContents()));
+		paste.setOnAction(e -> board.addClip(Clipboard.getInstance().copyFromClipboard()));
+		delete.setOnAction(e -> board.removeClip(selected.getContents()));
 		
 		//Tools
 		Menu toolsMenu = new Menu("Tools");
