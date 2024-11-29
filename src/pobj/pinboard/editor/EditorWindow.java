@@ -19,6 +19,7 @@ import pobj.pinboard.editor.tools.Tool;
 import pobj.pinboard.editor.tools.ToolEllipse;
 import pobj.pinboard.editor.tools.ToolImage;
 import pobj.pinboard.editor.tools.ToolRect;
+import pobj.pinboard.editor.tools.ToolSelection;
 
 public class EditorWindow implements EditorInterface{
 	private Board board;
@@ -30,11 +31,14 @@ public class EditorWindow implements EditorInterface{
 	
 	private Tool currentTool;
 	
+	private Selection selected;
+	
 	
 	public EditorWindow(Stage stage) {
 		//initialisation 
 		this.board = new Board();
-		this.canvas = new Canvas(800, 600);
+		this.canvas = new Canvas(1000, 800);
+		this.selected = new Selection();
 		
 		
 		//cofig du layout principale
@@ -70,12 +74,15 @@ public class EditorWindow implements EditorInterface{
 		Button rectButton = new Button("Rectangle");
 		Button ellipseButton = new Button("Ellipse");
 		Button imgButton = new Button("Image");
-		toolBar.getItems().addAll(rectButton, ellipseButton, imgButton);
+		Button selectButton = new Button("Select");
+		toolBar.getItems().addAll(rectButton, ellipseButton, imgButton, selectButton);
+		
 		
 		//action des boutons
 		rectButton.setOnAction(e->currentTool = new ToolRect());
 		ellipseButton.setOnAction(e->currentTool = new ToolEllipse());
 		imgButton.setOnAction(e->currentTool = new ToolImage(stage));
+		selectButton.setOnAction(e->currentTool = new ToolSelection());
 		
 		//Separateur
 		Separator sepa = new Separator();
@@ -84,13 +91,6 @@ public class EditorWindow implements EditorInterface{
 		statusBar = new Label("Bienvenu au PinBoard");
 		
 		vbox.getChildren().addAll(menuBar, toolBar, canvas, sepa, statusBar);
-		
-		
-		//ajout d'éléments dans le canvas
-		
-		//board.addClip(new ClipRect(100, 100, 300, 200, Color.BLUE));
-		//board.addClip(new ClipEllipse(200, 150, 400, 250, Color.RED));
-		//board.draw(canvas.getGraphicsContext2D());
 		
 		
 		//gestion des events de la souris
@@ -141,8 +141,7 @@ public class EditorWindow implements EditorInterface{
 
 	@Override
 	public Selection getSelection() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.selected;
 	}
 
 

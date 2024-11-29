@@ -15,16 +15,20 @@ public class Selection {
 	}
 	
 	public void select(Board board, double x, double y) {
-		for(Clip clip : board.getContents()) {
+		clear();
+		for(int i=board.getContents().size()-1; i>=0; i--) {
+			Clip clip = board.getContents().get(i);
 			if(clip.isSelected(x, y)) {
 				clipSelectionne.add(clip);
-				break; //car on selecte le premier élément graphique de la planche
+				break; //car on selecte que le premier élément graphique de la planche
 			}
 		}
 	}
 	
-	public void toggleSelect(Board board, double x, double y) {
-		for(Clip clip : board.getContents()) {
+	public void toogleSelect(Board board, double x, double y) {
+		
+		for(int i=board.getContents().size()-1; i>=0; i--) {
+			Clip clip = board.getContents().get(i);
 			if(clip.isSelected(x, y)) {
 				if(clipSelectionne.contains(clip)) {
 					clipSelectionne.remove(clip); //si deuxieme press sur le meme élément on le déselect
@@ -32,9 +36,9 @@ public class Selection {
 				else {
 					clipSelectionne.add(clip);
 					break; //toujours le premier element de la planche
-				}				
+				}
 			}
-		}
+		}	
 	}
 	
 	public void clear() {
@@ -50,7 +54,7 @@ public class Selection {
 		gc.setLineWidth(1.0);
 		for(Clip clip : clipSelectionne) {
 			//gc.strokeRect(Math.min(oriX, endX), Math.min(oriY, endY), Math.abs(endX-oriX), Math.abs(endY-oriY));
-			gc.strokeRect(clip.getLeft(), clip.getTop(), clip.getRight(), clip.getBottom());
+			gc.strokeRect(clip.getLeft(), clip.getTop(), clip.getRight()-clip.getLeft(), clip.getBottom() - clip.getTop());
 		}	
 	}
 }
