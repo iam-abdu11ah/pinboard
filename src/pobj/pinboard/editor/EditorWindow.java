@@ -21,7 +21,7 @@ import pobj.pinboard.editor.tools.ToolImage;
 import pobj.pinboard.editor.tools.ToolRect;
 import pobj.pinboard.editor.tools.ToolSelection;
 
-public class EditorWindow implements EditorInterface{
+public class EditorWindow implements EditorInterface, ClipboardListener{
 	private Board board;
 	private Canvas canvas;
 	private VBox vbox;
@@ -39,7 +39,7 @@ public class EditorWindow implements EditorInterface{
 		this.board = new Board();
 		this.canvas = new Canvas(1000, 800);
 		this.selected = new Selection();
-		
+		Clipboard.getInstance().addListener(this); //ajout de cet objet dans la liste de Clipboard Listener
 		
 		//cofig du layout principale
 		this.vbox = new VBox();
@@ -58,7 +58,10 @@ public class EditorWindow implements EditorInterface{
 		
 		//actions pour newFile et closeFile
 		newFile.setOnAction(e->new EditorWindow(new Stage()));
-		closeFile.setOnAction(e->stage.close());
+		closeFile.setOnAction(e->{
+			stage.close();
+			Clipboard.getInstance().removeListener(this); //retrait de cet objet de la liste de Clipboard Listener
+		});
 		
 		//Edit
 		Menu editMenu = new Menu("Edit");
@@ -126,6 +129,8 @@ public class EditorWindow implements EditorInterface{
 		});
 		
 		
+		
+		
 		Scene scene = new Scene(vbox);
         stage.setScene(scene);
         stage.setTitle("PinBoard");
@@ -159,6 +164,18 @@ public class EditorWindow implements EditorInterface{
 	public CommandStack getUndoStack() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public void clipboardChanged() {
+		Menu edit = menuBar.getMenus().get(1); 		//edit est en 2e position
+		MenuItem paste = edit.getItems().get(1);	//paste est en 2e postition
+		
+		//si aucun element est copié, on grise l'option "paste", sinon il reste telquel
+
+		boolean isEmpty = Clipboard.getInstance().isEmpty();
+		paste.setDisable(isEmpty);
 	}
 
 

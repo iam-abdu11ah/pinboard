@@ -9,15 +9,21 @@ public class Clipboard {
 	private List<Clip> elemCopies;
 	
 	private static Clipboard clipboard;
+	private List<ClipboardListener> listeners ;
 	
 	private Clipboard() {
 		elemCopies = new ArrayList<Clip>();
+		listeners = new ArrayList<>();
 	}
 	
 	public void copyToClipboard(List<Clip> clips) {
 		clear();
 		for(Clip c : clips) {
 			elemCopies.add(c.copy());
+		}
+		
+		for(ClipboardListener cbL : listeners) {
+			cbL.clipboardChanged();
 		}
 	}
 	
@@ -32,6 +38,11 @@ public class Clipboard {
 	
 	public void clear() {
 		elemCopies.clear();
+		
+		//pour pouvoir griser l'option Paste, car il y aura pas d'elelment
+		for(ClipboardListener cbL : listeners) {
+			cbL.clipboardChanged();
+		}
 	}
 	
 	public boolean isEmpty() {
@@ -43,6 +54,14 @@ public class Clipboard {
 			clipboard = new Clipboard();
 		}
 		return clipboard;
+	}
+	
+	public void addListener(ClipboardListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeListener(ClipboardListener listener) {
+		listeners.remove(listener);
 	}
 
 }
