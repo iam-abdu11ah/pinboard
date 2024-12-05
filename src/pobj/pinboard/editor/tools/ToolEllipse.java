@@ -9,6 +9,11 @@ import pobj.pinboard.editor.EditorInterface;
 public class ToolEllipse implements Tool{
 
 	private double oriX, oriY, endX, endY;
+	private Color color;
+	public ToolEllipse(Color color) {
+		this.color = color;
+	}
+	
 
 	@Override
 	public void press(EditorInterface i, MouseEvent e) {
@@ -31,18 +36,26 @@ public class ToolEllipse implements Tool{
 		endY = e.getY();
 		
 		//ajout de rectangle final à la planche
-		i.getBoard().addClip(new ClipEllipse(Math.min(oriX, endX), Math.min(oriY, endY), Math.max(oriX, endX), Math.max(oriY, endY), Color.RED));
+		i.getBoard().addClip(new ClipEllipse(Math.min(oriX, endX), Math.min(oriY, endY), Math.max(oriX, endX), Math.max(oriY, endY), this.color));
 		
 		
 	}
 
 	@Override
 	public void drawFeedback(EditorInterface i, GraphicsContext gc) {
-		gc.setStroke(Color.RED);
+		if(this.color == Color.BLACK) {
+			gc.setStroke(Color.RED);
+		}else {
+			gc.setStroke(Color.BLACK);
+		}
 		gc.setLineWidth(1.0);
 		
 		gc.strokeOval(Math.min(oriX, endX), Math.min(oriY, endY), Math.abs(endX-oriX), Math.abs(endY-oriY));
 		
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	@Override

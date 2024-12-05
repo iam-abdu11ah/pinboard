@@ -11,8 +11,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import pobj.pinboard.document.*;
 import pobj.pinboard.editor.tools.Tool;
@@ -27,9 +29,11 @@ public class EditorWindow implements EditorInterface, ClipboardListener{
 	private VBox vbox;
 	private MenuBar menuBar;
 	private ToolBar toolBar;
+	private ToolBar colorBar;
 	private Label statusBar;
 	
 	private Tool currentTool;
+	private Color currentColor = Color.BLACK; //couleur par défaut
 	
 	private Selection selected;
 	
@@ -79,6 +83,7 @@ public class EditorWindow implements EditorInterface, ClipboardListener{
 		//Tools
 		Menu toolsMenu = new Menu("Tools");
 		
+		
 		//ajout de File, Edit, Tools à la barre de Menu
 		menuBar.getMenus().addAll(fileMenu, editMenu, toolsMenu);	
 		
@@ -92,10 +97,87 @@ public class EditorWindow implements EditorInterface, ClipboardListener{
 		
 		
 		//action des boutons
-		rectButton.setOnAction(e->currentTool = new ToolRect());
-		ellipseButton.setOnAction(e->currentTool = new ToolEllipse());
+		rectButton.setOnAction(e->currentTool = new ToolRect(currentColor));
+		ellipseButton.setOnAction(e->currentTool = new ToolEllipse(currentColor));
 		imgButton.setOnAction(e->currentTool = new ToolImage(stage));
 		selectButton.setOnAction(e->currentTool = new ToolSelection());
+		
+		
+		//barre/palette de couleur
+		ToolBar colorBar = new ToolBar();
+		Button redButton = createColorButton(Color.RED);
+		redButton.setOnAction(e->{
+			currentColor = Color.RED;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.RED);
+			}
+		});
+		Button blueButton = createColorButton(Color.BLUE);
+		blueButton.setOnAction(e->{
+			currentColor = Color.BLUE;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.BLUE);
+			}
+		});
+		Button whiteButton = createColorButton(Color.WHITE);
+		whiteButton.setOnAction(e->{
+			currentColor = Color.WHITE;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.WHITE);
+			}
+		});
+
+		Button greenButton = createColorButton(Color.GREEN);
+		greenButton.setOnAction(e->{
+			currentColor = Color.GREEN;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.GREEN);
+			}
+		});
+
+		Button roseButton = createColorButton(Color.MISTYROSE);
+		roseButton.setOnAction(e->{
+			currentColor = Color.MISTYROSE;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.MISTYROSE);
+			}
+		});
+
+		Button purpleButton = createColorButton(Color.PURPLE);
+		purpleButton.setOnAction(e->{
+			currentColor = Color.PURPLE;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.PURPLE);
+			}
+		});
+
+		Button blackButton = createColorButton(Color.BLACK);
+		blackButton.setOnAction(e->{
+			currentColor = Color.BLACK;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.BLACK);
+			}
+		});
+
+		Button yellowButton = createColorButton(Color.YELLOW);
+		yellowButton.setOnAction(e->{
+			currentColor = Color.YELLOW;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.YELLOW);
+			}
+		});
+
+		Button limeButton = createColorButton(Color.LIMEGREEN);
+		limeButton.setOnAction(e->{
+			currentColor = Color.LIMEGREEN;
+			if(currentTool != null && currentTool instanceof ToolRect toolRect) {
+				toolRect.setColor(Color.LIMEGREEN);
+			}
+		});
+
+		colorBar.getItems().addAll(redButton, blueButton, whiteButton, greenButton, roseButton, purpleButton, blackButton, yellowButton, limeButton);
+		
+		
 		
 		//Separateur
 		Separator sepa = new Separator();
@@ -103,7 +185,7 @@ public class EditorWindow implements EditorInterface, ClipboardListener{
 		//statusBar / Label
 		statusBar = new Label("Bienvenu au PinBoard");
 		
-		vbox.getChildren().addAll(menuBar, toolBar, canvas, sepa, statusBar);
+		vbox.getChildren().addAll(menuBar, toolBar, colorBar, canvas, sepa, statusBar);
 		
 		
 		//gestion des events de la souris
@@ -136,6 +218,23 @@ public class EditorWindow implements EditorInterface, ClipboardListener{
         stage.setTitle("PinBoard");
         stage.show();
 
+	}
+	
+	private Button createColorButton(Color c) {
+		Button button = new Button();
+		//CSS
+		button.setStyle("-fx-padding: 0; -fx-background-color: transparent; -fx-border: 1;");
+		
+		Rectangle colRect = new Rectangle(40, 40);
+		colRect.setArcHeight(10);
+		colRect.setArcWidth(10);
+		colRect.setFill(c);
+		colRect.setStroke(Color.BLACK);
+		
+		button.setGraphic(colRect);
+		
+		return button;
+		
 	}
 	
 

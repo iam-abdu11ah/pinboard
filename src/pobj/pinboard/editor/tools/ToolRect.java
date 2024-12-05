@@ -9,6 +9,10 @@ import pobj.pinboard.editor.EditorInterface;
 public class ToolRect implements Tool{
 	
 	private double oriX, oriY, endX, endY;
+	private Color color;
+	public ToolRect(Color color) {
+		this.color = color;
+	}
 
 	@Override
 	public void press(EditorInterface i, MouseEvent e) {
@@ -31,18 +35,27 @@ public class ToolRect implements Tool{
 		endY = e.getY();
 		
 		//ajout de rectangle final à la planche
-		i.getBoard().addClip(new ClipRect(Math.min(oriX, endX), Math.min(oriY, endY), Math.max(oriX, endX), Math.max(oriY, endY), Color.BLUE));
+		i.getBoard().addClip(new ClipRect(Math.min(oriX, endX), Math.min(oriY, endY), Math.max(oriX, endX), Math.max(oriY, endY), this.color));
 		
 		
 	}
 
 	@Override
 	public void drawFeedback(EditorInterface i, GraphicsContext gc) {
-		gc.setStroke(Color.BLUE);
+		if(this.color == Color.BLACK) {
+			gc.setStroke(Color.RED);
+		}else {
+			gc.setStroke(Color.BLACK);
+		}
+		
 		gc.setLineWidth(1.0);
 		
 		gc.strokeRect(Math.min(oriX, endX), Math.min(oriY, endY), Math.abs(endX-oriX), Math.abs(endY-oriY));
 		
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	@Override

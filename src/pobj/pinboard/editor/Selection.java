@@ -16,12 +16,19 @@ public class Selection {
 	
 	public void select(Board board, double x, double y) {
 		clear();
+		Clip topClip = null;
 		for(int i=board.getContents().size()-1; i>=0; i--) {
 			Clip clip = board.getContents().get(i);
 			if(clip.isSelected(x, y)) {
 				clipSelectionne.add(clip);
+				topClip = clip;
 				break; //car on selecte que le premier élément graphique de la planche
 			}
+		}
+		if(topClip != null) {
+			//board.getContents().set(board.getContents().size()-1, topClip);
+			board.getContents().remove(topClip);
+			board.getContents().add(topClip);
 		}
 	}
 	
